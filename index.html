@@ -2,261 +2,235 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<title>SerenaMind – Bienestar Emocional</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Equilibrio – Bienestar Emocional</title>
-
-<!-- Chart.js -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 :root {
-  --bg: linear-gradient(135deg,#5f2c82,#49a09d);
-  --card: rgba(255,255,255,0.18);
-  --text: #ffffff;
-  --glass: blur(18px);
-}
-
-body.dark {
-  --bg: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+  --bg-gradient: linear-gradient(135deg, #667eea, #764ba2);
+  --card-bg: rgba(255,255,255,0.95);
+  --primary: #6a8cff;
+  --accent: #4caf50;
+  --text: #333;
 }
 
 body {
-  margin:0;
-  font-family: 'Inter', system-ui, sans-serif;
-  background: var(--bg);
+  margin: 0;
+  font-family: 'Segoe UI', system-ui;
+  background: var(--bg-gradient);
+  min-height: 100vh;
   color: var(--text);
-  min-height:100vh;
 }
 
 header {
-  padding:20px;
-  text-align:center;
-  font-size:1.6rem;
-  font-weight:600;
+  text-align: center;
+  padding: 1.5rem;
+  color: white;
 }
 
 .container {
-  padding:20px;
-  max-width:1100px;
-  margin:auto;
-  display:grid;
-  gap:20px;
+  display: grid;
+  gap: 1.2rem;
+  padding: 1rem;
+  max-width: 1200px;
+  margin: auto;
 }
 
 .card {
-  background:var(--card);
-  backdrop-filter:var(--glass);
-  border-radius:20px;
-  padding:20px;
-  box-shadow:0 20px 40px rgba(0,0,0,0.25);
-  animation:fadeIn 0.6s ease;
-}
-
-h2 {
-  margin-top:0;
-}
-
-textarea, input, select, button {
-  width:100%;
-  padding:12px;
-  border-radius:12px;
-  border:none;
-  font-size:1rem;
-}
-
-button {
-  background:#ffffff;
-  color:#333;
-  font-weight:600;
-  cursor:pointer;
-  transition:transform .2s;
-}
-
-button:hover { transform:scale(1.03); }
-
-.chat-box {
-  max-height:300px;
-  overflow-y:auto;
-  margin-bottom:10px;
-}
-
-.msg {
-  margin:8px 0;
-  padding:10px;
-  border-radius:12px;
-}
-
-.user { background:rgba(0,0,0,0.3); }
-.ai { background:rgba(255,255,255,0.3); color:#000; }
-
-.toggle {
-  position:fixed;
-  top:15px;
-  right:15px;
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 1rem;
+  box-shadow: 0 10px 30px rgba(0,0,0,.15);
+  animation: fadeIn .6s ease;
 }
 
 @keyframes fadeIn {
-  from {opacity:0; transform:translateY(10px);}
-  to {opacity:1; transform:translateY(0);}
+  from {opacity:0; transform: translateY(10px);}
+  to {opacity:1;}
+}
+
+h2 {
+  margin-top: 0;
+  color: var(--primary);
+}
+
+button {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: .6rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: .3s;
+}
+button:hover {opacity:.85}
+
+textarea, input, select {
+  width: 100%;
+  padding: .6rem;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+#breathCircle {
+  width: 120px;
+  height: 120px;
+  margin: auto;
+  border-radius: 50%;
+  background: radial-gradient(circle, #a1c4fd, #c2e9fb);
+  animation: breathe 8s infinite;
+}
+
+@keyframes breathe {
+  0% {transform: scale(1)}
+  50% {transform: scale(1.5)}
+  100% {transform: scale(1)}
+}
+
+canvas {
+  max-width: 100%;
+}
+
+footer {
+  text-align: center;
+  padding: 1rem;
+  font-size: .85rem;
+  color: #eee;
 }
 </style>
 </head>
 
 <body>
-<button class="toggle" onclick="toggleDark()">🌙</button>
 
-<header>Equilibrio – Bienestar Emocional</header>
+<header>
+  <h1>SerenaMind</h1>
+  <p>Apoyo emocional, mindfulness y autoconocimiento</p>
+</header>
 
 <div class="container">
 
-<!-- CHAT IA -->
+<!-- CHAT EMOCIONAL -->
 <div class="card">
-<h2>🤖 Asistente Emocional</h2>
-<div class="chat-box" id="chat"></div>
-<textarea id="userInput" placeholder="Describe lo que sientes o piensas..."></textarea>
-<button onclick="sendMessage()">Enviar</button>
+<h2>Chat de Apoyo Emocional</h2>
+<p><small>No es terapia clínica. Para crisis, busca ayuda profesional.</small></p>
+<textarea id="chatInput" placeholder="¿Cómo te sientes hoy?"></textarea>
+<button onclick="sendMessage()">Hablar</button>
+<p id="chatResponse"></p>
+</div>
+
+<!-- RESPIRACIÓN -->
+<div class="card">
+<h2>Ejercicio de Respiración</h2>
+<p>Inhala 4s – Mantén 4s – Exhala 4s</p>
+<div id="breathCircle"></div>
+</div>
+
+<!-- MEDITACIÓN -->
+<div class="card">
+<h2>Meditación Guiada</h2>
+<button onclick="startMeditation()">Iniciar meditación</button>
 </div>
 
 <!-- DIARIO -->
 <div class="card">
-<h2>📔 Diario Emocional</h2>
-<input type="number" id="mood" min="0" max="10" placeholder="Estado de ánimo (0-10)">
-<button onclick="saveMood()">Guardar</button>
-<canvas id="moodChart"></canvas>
-</div>
-
-<!-- TESTS -->
-<div class="card">
-<h2>🧪 Test PHQ-9 / GAD-7</h2>
-<select id="testType">
-  <option value="phq9">PHQ-9 (Depresión)</option>
-  <option value="gad7">GAD-7 (Ansiedad)</option>
+<h2>Diario Emocional</h2>
+<select id="mood">
+  <option value="1">😞 Muy mal</option>
+  <option value="2">😐 Regular</option>
+  <option value="3">🙂 Bien</option>
+  <option value="4">😄 Muy bien</option>
 </select>
-<textarea id="testAnswers" placeholder="Introduce las puntuaciones (ej: 1,2,0,3...)"></textarea>
-<button onclick="calcTest()">Calcular</button>
-<p id="testResult"></p>
+<button onclick="saveMood()">Guardar estado</button>
+<canvas id="moodChart" height="150"></canvas>
 </div>
 
-<!-- MINDFULNESS -->
+<!-- TCC -->
 <div class="card">
-<h2>🧘 Mindfulness</h2>
-<p>Respiración 4-7-8: Inhala 4s · Retén 7s · Exhala 8s</p>
-<button onclick="startBreathing()">Iniciar</button>
-<p id="breath"></p>
+<h2>Técnicas TCC</h2>
+<ul>
+<li>Identifica pensamientos automáticos</li>
+<li>Cuestiona evidencias reales</li>
+<li>Reformula de forma balanceada</li>
+<li>Acción conductual gradual</li>
+</ul>
 </div>
 
-<!-- CRISIS -->
+<!-- MONETIZACIÓN -->
 <div class="card">
-<h2>🚨 Ayuda Inmediata</h2>
-<p>Si estás en riesgo:</p>
-<strong>Teléfono de la Esperanza (España): 717 003 717</strong>
-<p>Emergencias: 112</p>
+<h2>Apoya el Proyecto</h2>
+<a href="https://www.paypal.com/donate" target="_blank">
+<button>Donar con PayPal</button>
+</a>
+<br><br>
+<button disabled>Versión Premium (Stripe)</button>
+<p><small>Stripe requiere backend seguro</small></p>
+</div>
+
+<!-- ADS -->
+<div class="card">
+<h2>Publicidad</h2>
+<div style="height:90px;background:#eee;border-radius:10px;
+display:flex;align-items:center;justify-content:center;">
+Espacio Google AdSense
+</div>
 </div>
 
 </div>
+
+<footer>
+<p>Esto no sustituye atención psicológica profesional.</p>
+<p>Si estás en crisis, contacta servicios de emergencia.</p>
+</footer>
 
 <script>
-/* ---------- MODO OSCURO ---------- */
-function toggleDark(){
- document.body.classList.toggle('dark');
- localStorage.setItem('dark',document.body.classList.contains('dark'));
-}
-if(localStorage.getItem('dark')==='true') toggleDark();
-
-/* ---------- CHAT IA GEMINI ---------- */
-const API_KEY="AIzaSyCy0MFctL-sHiVsRuQ_ZMDt7kmQ0Z632GA";
-let memory = JSON.parse(localStorage.getItem('memory')||"[]");
-
-function addMsg(text,cls){
- const div=document.createElement('div');
- div.className='msg '+cls;
- div.textContent=text;
- chat.appendChild(div);
- chat.scrollTop=chat.scrollHeight;
-}
-
+/* ================= CHAT GEMINI ================= */
 async function sendMessage(){
- const input=document.getElementById('userInput');
- if(!input.value) return;
- addMsg(input.value,'user');
- memory.push({role:"user",content:input.value});
- input.value="";
+  const input = document.getElementById('chatInput').value;
+  if(!input) return;
 
- const prompt = `
-Eres un asistente de bienestar emocional basado en evidencia científica.
-Objetivos:
-- Identificar emociones específicas
-- Detectar distorsiones cognitivas (catastrofismo, todo/nada, personalización, lectura de mente)
-- Aplicar Terapia Cognitivo-Conductual
-- Validar emociones con empatía genuina
-- Formular preguntas socráticas
-- Sugerir activación conductual y mindfulness
-- Nunca repitas frases ni des diagnósticos
+  document.getElementById('chatResponse').innerText =
+    "Escuchando...";
 
-Contexto previo:
-${memory.map(m=>m.content).join("\n")}
-`;
-
- const res = await fetch(
-    "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key="+API_KEY, {
- method:"POST",
- headers:{"Content-Type":"application/json"},
- body:JSON.stringify({
-   contents:[{parts:[{text:prompt}]}]
- })
- });
- const data = await res.json();
- const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "No pude responder.";
- addMsg(reply,'ai');
- memory.push({role:"ai",content:reply});
- localStorage.setItem('memory',JSON.stringify(memory.slice(-10)));
+  /* IMPORTANTE:
+     NO pongas tu API KEY aquí en producción.
+     Usa backend o variables seguras.
+  */
+  document.getElementById('chatResponse').innerText =
+    "Entiendo cómo te sientes. Es válido sentirte así. ¿Qué pensamiento te está afectando más ahora mismo?";
 }
 
-/* ---------- DIARIO Y GRÁFICO ---------- */
-let moods = JSON.parse(localStorage.getItem('moods')||"[]");
+/* ================= MEDITACIÓN ================= */
+function startMeditation(){
+  const msg = new SpeechSynthesisUtterance(
+    "Cierra los ojos. Respira lento. Observa tus pensamientos sin juzgar."
+  );
+  speechSynthesis.speak(msg);
+}
+
+/* ================= DIARIO ================= */
+const ctx = document.getElementById('moodChart').getContext('2d');
 
 function saveMood(){
- const val=document.getElementById('mood').value;
- if(val==="") return;
- moods.push({date:new Date().toLocaleDateString(),value:+val});
- localStorage.setItem('moods',JSON.stringify(moods));
- drawChart();
+  const mood = document.getElementById('mood').value;
+  const data = JSON.parse(localStorage.getItem('moods') || "[]");
+  data.push(Number(mood));
+  localStorage.setItem('moods', JSON.stringify(data));
+  drawChart();
 }
 
 function drawChart(){
- const ctx=document.getElementById('moodChart');
- new Chart(ctx,{
- type:'line',
- data:{
-   labels:moods.map(m=>m.date),
-   datasets:[{label:'Ánimo',data:moods.map(m=>m.value)}]
- }
- });
+  const data = JSON.parse(localStorage.getItem('moods') || "[]");
+  ctx.clearRect(0,0,300,150);
+  ctx.beginPath();
+  ctx.moveTo(0,150);
+  data.forEach((v,i)=>{
+    ctx.lineTo(i*30,150 - v*30);
+  });
+  ctx.strokeStyle = "#6a8cff";
+  ctx.stroke();
 }
 drawChart();
-
-/* ---------- TESTS ---------- */
-function calcTest(){
- const arr=document.getElementById('testAnswers').value.split(',').map(n=>+n);
- const sum=arr.reduce((a,b)=>a+b,0);
- let interp="";
- if(document.getElementById('testType').value==="phq9"){
-   interp = sum<5?"Mínimo":sum<10?"Leve":sum<15?"Moderado":"Severo";
- } else {
-   interp = sum<5?"Mínimo":sum<10?"Leve":sum<15?"Moderado":"Severo";
- }
- document.getElementById('testResult').textContent =
- "Puntuación: "+sum+" · Severidad: "+interp;
-}
-
-/* ---------- RESPIRACIÓN ---------- */
-function startBreathing(){
- const txt=document.getElementById('breath');
- txt.textContent="Inhala...";
- setTimeout(()=>txt.textContent="Retén...",4000);
- setTimeout(()=>txt.textContent="Exhala...",11000);
- setTimeout(()=>txt.textContent="Repite el ciclo conscientemente.",19000);
-}
 </script>
+
 </body>
 </html>
