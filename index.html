@@ -1,142 +1,145 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Bienestar Emocional</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8" />
+<title>Bienestar Emocional</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <style>
-    :root {
-      --bg: #fff7f2;
-      --primary: #d96c4f;
-      --secondary: #f3c7b1;
-      --text: #3b2f2f;
-      --card: #ffffff;
-    }
+<style>
+:root {
+  --bg: linear-gradient(135deg, #fff3ec, #fde2d6);
+  --primary: #d96c4f;
+  --secondary: #f1b7a1;
+  --text: #3b2f2f;
+  --card: #ffffff;
+  --ai: #fdf1eb;
+}
 
-    body {
-      margin: 0;
-      font-family: system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-    }
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+}
 
-    header {
-      padding: 1rem;
-      background: var(--primary);
-      color: white;
-      text-align: center;
-      font-weight: bold;
-    }
+header {
+  padding: 1rem;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
 
-    nav {
-      display: flex;
-      justify-content: space-around;
-      background: var(--secondary);
-      padding: 0.5rem;
-    }
+nav {
+  display: flex;
+  justify-content: space-around;
+  background: var(--secondary);
+  padding: 0.5rem;
+}
 
-    nav button {
-      background: none;
-      border: none;
-      font-weight: bold;
-      cursor: pointer;
-      color: var(--text);
-    }
+nav button {
+  background: none;
+  border: none;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+}
 
-    section {
-      display: none;
-      padding: 1rem;
-    }
+section {
+  display: none;
+  padding: 1rem;
+}
 
-    section.active {
-      display: block;
-    }
+section.active {
+  display: block;
+}
 
-    .card {
-      background: var(--card);
-      padding: 1rem;
-      border-radius: 12px;
-      margin-bottom: 1rem;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    }
+.card {
+  background: var(--card);
+  padding: 1rem;
+  border-radius: 16px;
+  margin-bottom: 1rem;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
 
-    #chat {
-      max-height: 60vh;
-      overflow-y: auto;
-    }
+#chat {
+  max-height: 55vh;
+  overflow-y: auto;
+  padding-bottom: 1rem;
+}
 
-    .msg {
-      margin-bottom: 0.5rem;
-    }
+.msg {
+  max-width: 80%;
+  margin-bottom: 0.6rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: 14px;
+  animation: fadeIn 0.3s ease;
+}
 
-    .user {
-      text-align: right;
-      font-weight: bold;
-    }
+.user {
+  margin-left: auto;
+  background: var(--primary);
+  color: white;
+}
 
-    .ai {
-      text-align: left;
-      color: #5a3e36;
-    }
+.ai {
+  margin-right: auto;
+  background: var(--ai);
+}
 
-    input, textarea, select, button {
-      width: 100%;
-      padding: 0.6rem;
-      margin-top: 0.5rem;
-      border-radius: 8px;
-      border: 1px solid #ccc;
-    }
+textarea {
+  resize: none;
+}
 
-    button.primary {
-      background: var(--primary);
-      color: white;
-      border: none;
-      font-weight: bold;
-    }
+button.primary {
+  background: var(--primary);
+  color: white;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
 
-    .mood {
-      font-size: 2rem;
-      cursor: pointer;
-    }
-  </style>
+.mood {
+  font-size: 2rem;
+  cursor: pointer;
+  margin: 0.3rem;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+</style>
 </head>
 
 <body>
 
-<header>Bienestar Emocional</header>
+<header>🌿 Bienestar Emocional</header>
 
 <nav>
-  <button onclick="showSection('chatSection')">Chat IA</button>
-  <button onclick="showSection('techniquesSection')">Técnicas</button>
-  <button onclick="showSection('moodSection')">Ánimo</button>
-  <button onclick="showSection('privacySection')">Privacidad</button>
+  <button onclick="showSection('chatSection')">💬 Chat IA</button>
+  <button onclick="showSection('techniquesSection')">🧘 Técnicas</button>
+  <button onclick="showSection('moodSection')">😊 Ánimo</button>
+  <button onclick="showSection('privacySection')">🔒 Privacidad</button>
 </nav>
 
-<!-- CHAT IA -->
+<!-- CHAT -->
 <section id="chatSection" class="active">
   <div class="card" id="chat"></div>
-
-  <textarea id="userInput" placeholder="Escribe cómo te sientes..."></textarea>
+  <textarea id="userInput" rows="2" placeholder="Escribe cómo te sientes..."></textarea>
   <button class="primary" onclick="sendMessage()">Enviar</button>
 </section>
 
 <!-- TÉCNICAS -->
 <section id="techniquesSection">
   <div class="card">
-    <h3>Respiración 4-6</h3>
-    <p>Inhala 4 segundos, exhala 6 segundos. Repite por 1 minuto.</p>
+    <h3>Respiración 4–6</h3>
+    <p>Inhala 4 segundos, exhala 6 segundos. Repite por un minuto.</p>
     <button onclick="startBreathing()">Iniciar</button>
     <p id="breathing"></p>
   </div>
-
-  <div class="card">
-    <h3>Atención plena breve</h3>
-    <p>Cierra los ojos y nombra 3 cosas que puedas sentir con tu cuerpo.</p>
-  </div>
 </section>
 
-<!-- REGISTRO DE ÁNIMO -->
+<!-- ÁNIMO -->
 <section id="moodSection">
   <div class="card">
     <h3>¿Cómo te sientes ahora?</h3>
@@ -153,50 +156,33 @@
 <!-- PRIVACIDAD -->
 <section id="privacySection">
   <div class="card">
-    <h3>Privacidad y seguridad</h3>
-    <p>
-      Esta app no sustituye atención profesional.  
-      Tus datos permanecen en tu navegador.
-    </p>
-    <p>
-      Si te encuentras en crisis, busca ayuda profesional inmediata.
-    </p>
+    <p>Esta app no sustituye atención profesional.</p>
+    <p>Si estás en crisis, busca ayuda inmediata.</p>
   </div>
 </section>
 
 <script>
-/* ------------------------------
-   NAVEGACIÓN
---------------------------------*/
 function showSection(id) {
   document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
 
-/* ------------------------------
-   PROMPT CLÍNICAMENTE SEGURO
---------------------------------*/
+/* ===== PROMPT SEGURO ===== */
 const SYSTEM_PROMPT = `
 Eres una asistente de bienestar emocional.
-No eres terapeuta ni haces diagnósticos.
-Responde con empatía, frases breves (máx. 2–3).
-Valida emociones antes de sugerir algo.
+Responde en máximo 2–3 frases.
+Valida la emoción primero.
+No diagnostiques.
 Haz como máximo una pregunta.
-Si detectas crisis, indica buscar ayuda profesional.
 `;
 
-/* ------------------------------
-   DETECCIÓN DE CRISIS (BÁSICA)
---------------------------------*/
+/* ===== CRISIS ===== */
 function isCrisis(text) {
-  const crisisWords = ["suicid", "matarme", "no quiero vivir", "hacerme daño"];
-  return crisisWords.some(w => text.toLowerCase().includes(w));
+  return ["suicid", "matarme", "no quiero vivir", "hacerme daño"]
+    .some(w => text.toLowerCase().includes(w));
 }
 
-/* ------------------------------
-   CHAT IA (Gemini – DEMO)
-   ⚠️ NO USAR EN PRODUCCIÓN ASÍ
---------------------------------*/
+/* ===== CHAT ===== */
 async function sendMessage() {
   const input = document.getElementById("userInput");
   const text = input.value.trim();
@@ -208,13 +194,13 @@ async function sendMessage() {
   if (isCrisis(text)) {
     addMessage("ai",
       "Siento que estés pasando por algo tan intenso. " +
-      "No puedo ayudarte en una crisis, pero es importante que busques ayuda inmediata de un profesional o servicio de emergencia."
+      "Es importante que busques ayuda profesional o servicios de emergencia ahora mismo."
     );
     return;
   }
 
-  const response = await callGemini(text);
-  addMessage("ai", response);
+  const reply = await callGemini(text);
+  addMessage("ai", reply);
 }
 
 function addMessage(role, text) {
@@ -226,111 +212,65 @@ function addMessage(role, text) {
   chat.scrollTop = chat.scrollHeight;
 }
 
-/* ------------------------------
-   LLAMADA A GEMINI
---------------------------------*/
+/* ===== ENTER PARA ENVIAR ===== */
+document.getElementById("userInput").addEventListener("keydown", e => {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
+/* ===== GEMINI ===== */
 async function callGemini(userText) {
-  // ⚠️ Reemplaza con tu API KEY SOLO PARA DEMO
-  const API_KEY = "AIzaSyCy0MFcLL-sHlVsRWQ_ZMJt7KmQ0Z632GA";
+      const API_KEY = "AIzaSyCy0MFctL-sHiVsRuQ_ZMDt7kmQ0Z632GA";
+  try {
+    const res = await fetch(
+      `https://AIzaSyCy0MFcLL-sHiVsRWQ_ZMJt7KmQ0Z632GA.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          contents: [
+            { role: "user", parts: [{ text: SYSTEM_PROMPT }] },
+            { role: "user", parts: [{ text: userText }] }
+          ]
+        })
+      }
+    );
 
-  const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`,
-    {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [
-          { role: "user", parts: [{ text: SYSTEM_PROMPT + "\nUsuario: " + userText }] }
-        ]
-      })
-    }
-  );
+    const data = await res.json();
+    return data.candidates[0].content.parts[0].text;
 
-  const data = await res.json();
-  return data.candidates?.[0]?.content?.parts?.[0]?.text
-    || "Gracias por compartir. Estoy aquí para acompañarte.";
+  } catch {
+    const fallbacks = [
+      "Gracias por compartir esto. ¿Qué es lo que más te pesa ahora?",
+      "Suena a que ha sido un momento difícil. Estoy aquí para escucharte.",
+      "Tiene sentido que te sientas así. ¿Quieres contarme un poco más?"
+    ];
+    return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+  }
 }
 
-/* ------------------------------
-   RESPIRACIÓN GUIADA
---------------------------------*/
+/* ===== RESPIRACIÓN ===== */
 function startBreathing() {
   const el = document.getElementById("breathing");
-  let phase = 0;
-  const phases = ["Inhala…", "Exhala…"];
+  let steps = ["Inhala…", "Exhala…"];
+  let i = 0;
   const interval = setInterval(() => {
-    el.textContent = phases[phase % 2];
-    phase++;
-    if (phase > 6) clearInterval(interval);
+    el.textContent = steps[i % 2];
+    i++;
+    if (i > 6) clearInterval(interval);
   }, 5000);
 }
 
-/* ------------------------------
-   REGISTRO DE ÁNIMO (LOCAL)
---------------------------------*/
-function saveMood(value) {
-  const date = new Date().toLocaleString();
-  localStorage.setItem("mood", `${value} - ${date}`);
+/* ===== ÁNIMO ===== */
+function saveMood(v) {
+  const d = new Date().toLocaleString();
+  localStorage.setItem("mood", `${v} – ${d}`);
   document.getElementById("moodLog").textContent =
     "Último registro: " + localStorage.getItem("mood");
 }
 </script>
 
 </body>
-  
-<!-- Botón de Donación -->
-<div id="donation-btn" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
-  <button href="https://buy.stripe.com/7sY14n3oZdm67SV4Z6a01" target="_blank" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px 24px; border-radius: 25px; cursor: pointer; font-size: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); font-weight: bold;">
-    ❤️ Apoyar este proyecto
-  </button>
-</div>
-
-<!-- Modal de Donación -->
-<div id="donation-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; justify-content: center; align-items: center;">
-  <div style="background: white; padding: 30px; border-radius: 15px; max-width: 500px; width: 90%; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
-    <h2 style="color: #667eea; margin-bottom: 20px;">❤️ Apoya Bienestar Emocional</h2>
-    <p style="color: #666; margin-bottom: 25px;">Tu apoyo nos ayuda a mantener esta app gratuita y mejorarla continuamente.</p>
-    
-    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; text-align: left;">
-      <p style="margin: 5px 0; color: #333;"><strong>Titular:</strong> Manuel Gonzalez Arjona</p>
-      <p style="margin: 5px 0; color: #333;"><strong>IBAN:</strong> <span id="iban-text">ES67 1583 0001 1490 7665 2429</span></p>
-      <button onclick="copyIBAN()" style="background: #667eea; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; margin-top: 10px; width: 100%;">
-        📋 Copiar IBAN
-      </button>
-    </div>
-    
-    <p style="color: #888; font-size: 14px; margin-bottom: 20px;">Cualquier cantidad es bienvenida y muy apreciada 🙏</p>
-    
-    <button href="https://buy.stripe.com/7sY14n3oZdm67SV4Z6a01" target="_blank" style="background: #dc3545; color: white; border: none; padding: 10px 30px; border-radius: 5px; cursor: pointer;">
-      Cerrar
-    </button>
-  </div>
-</div>
-
-<script>
-function toggleDonation() {
-  const modal = document.getElementById('donation-modal');
-  if (modal.style.display === 'none' || modal.style.display === '') {
-    modal.style.display = 'flex';
-  } else {
-    modal.style.display = 'none';
-  }
-}
-
-function copyIBAN() {
-  const iban = 'ES6715830001149076652429';
-  navigator.clipboard.writeText(iban).then(() => {
-    alert('¡IBAN copiado al portapapeles! 📋');
-  }).catch(() => {
-    // Fallback para navegadores antiguos
-    const textArea = document.createElement('textarea');
-    textArea.value = iban;
-    document.body.appendChild(textArea);
-    textArea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textArea);
-    alert('¡IBAN copiado al portapapeles! 📋');
-  });
-}
-</script>
 </html>
