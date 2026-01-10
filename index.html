@@ -277,4 +277,60 @@ function saveMood(value) {
 </script>
 
 </body>
+  
+<!-- Botón de Donación -->
+<div id="donation-btn" style="position: fixed; bottom: 20px; right: 20px; z-index: 1000;">
+  <button onclick="toggleDonation()" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; padding: 12px 24px; border-radius: 25px; cursor: pointer; font-size: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.2); font-weight: bold;">
+    ❤️ Apoyar este proyecto
+  </button>
+</div>
+
+<!-- Modal de Donación -->
+<div id="donation-modal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 2000; justify-content: center; align-items: center;">
+  <div style="background: white; padding: 30px; border-radius: 15px; max-width: 500px; width: 90%; text-align: center; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+    <h2 style="color: #667eea; margin-bottom: 20px;">❤️ Apoya Bienestar Emocional</h2>
+    <p style="color: #666; margin-bottom: 25px;">Tu apoyo nos ayuda a mantener esta app gratuita y mejorarla continuamente.</p>
+    
+    <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin: 20px 0; text-align: left;">
+      <p style="margin: 5px 0; color: #333;"><strong>Titular:</strong> Manuel Gonzalez Arjona</p>
+      <p style="margin: 5px 0; color: #333;"><strong>IBAN:</strong> <span id="iban-text">ES67 1583 0001 1490 7665 2429</span></p>
+      <button onclick="copyIBAN()" style="background: #667eea; color: white; border: none; padding: 8px 16px; border-radius: 5px; cursor: pointer; margin-top: 10px; width: 100%;">
+        📋 Copiar IBAN
+      </button>
+    </div>
+    
+    <p style="color: #888; font-size: 14px; margin-bottom: 20px;">Cualquier cantidad es bienvenida y muy apreciada 🙏</p>
+    
+    <button onclick="toggleDonation()" style="background: #dc3545; color: white; border: none; padding: 10px 30px; border-radius: 5px; cursor: pointer;">
+      Cerrar
+    </button>
+  </div>
+</div>
+
+<script>
+function toggleDonation() {
+  const modal = document.getElementById('donation-modal');
+  if (modal.style.display === 'none' || modal.style.display === '') {
+    modal.style.display = 'flex';
+  } else {
+    modal.style.display = 'none';
+  }
+}
+
+function copyIBAN() {
+  const iban = 'ES6715830001149076652429';
+  navigator.clipboard.writeText(iban).then(() => {
+    alert('¡IBAN copiado al portapapeles! 📋');
+  }).catch(() => {
+    // Fallback para navegadores antiguos
+    const textArea = document.createElement('textarea');
+    textArea.value = iban;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand('copy');
+    document.body.removeChild(textArea);
+    alert('¡IBAN copiado al portapapeles! 📋');
+  });
+}
+</script>
 </html>
