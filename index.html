@@ -1,276 +1,263 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<title>Bienestar Emocional</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Equilibrio – Bienestar Emocional</title>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
 :root {
-  --bg: linear-gradient(135deg, #fff3ec, #fde2d6);
-  --primary: #d96c4f;
-  --secondary: #f1b7a1;
-  --text: #3b2f2f;
-  --card: #ffffff;
-  --ai: #fdf1eb;
+  --bg: linear-gradient(135deg,#5f2c82,#49a09d);
+  --card: rgba(255,255,255,0.18);
+  --text: #ffffff;
+  --glass: blur(18px);
+}
+
+body.dark {
+  --bg: linear-gradient(135deg,#0f2027,#203a43,#2c5364);
 }
 
 body {
-  margin: 0;
-  font-family: system-ui, sans-serif;
+  margin:0;
+  font-family: 'Inter', system-ui, sans-serif;
   background: var(--bg);
   color: var(--text);
+  min-height:100vh;
 }
 
 header {
-  padding: 1rem;
-  text-align: center;
-  font-size: 1.3rem;
-  font-weight: bold;
+  padding:20px;
+  text-align:center;
+  font-size:1.6rem;
+  font-weight:600;
 }
 
-nav {
-  display: flex;
-  justify-content: space-around;
-  background: var(--secondary);
-  padding: 0.5rem;
-}
-
-nav button {
-  background: none;
-  border: none;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-section {
-  display: none;
-  padding: 1rem;
-}
-
-section.active {
-  display: block;
+.container {
+  padding:20px;
+  max-width:1100px;
+  margin:auto;
+  display:grid;
+  gap:20px;
 }
 
 .card {
-  background: var(--card);
-  padding: 1rem;
-  border-radius: 16px;
-  margin-bottom: 1rem;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  background:var(--card);
+  backdrop-filter:var(--glass);
+  border-radius:20px;
+  padding:20px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.25);
+  animation:fadeIn 0.6s ease;
 }
 
-#chat {
-  max-height: 55vh;
-  overflow-y: auto;
-  padding-bottom: 1rem;
+h2 {
+  margin-top:0;
+}
+
+textarea, input, select, button {
+  width:100%;
+  padding:12px;
+  border-radius:12px;
+  border:none;
+  font-size:1rem;
+}
+
+button {
+  background:#ffffff;
+  color:#333;
+  font-weight:600;
+  cursor:pointer;
+  transition:transform .2s;
+}
+
+button:hover { transform:scale(1.03); }
+
+.chat-box {
+  max-height:300px;
+  overflow-y:auto;
+  margin-bottom:10px;
 }
 
 .msg {
-  max-width: 80%;
-  margin-bottom: 0.6rem;
-  padding: 0.6rem 0.8rem;
-  border-radius: 14px;
-  animation: fadeIn 0.3s ease;
+  margin:8px 0;
+  padding:10px;
+  border-radius:12px;
 }
 
-.user {
-  margin-left: auto;
-  background: var(--primary);
-  color: white;
-}
+.user { background:rgba(0,0,0,0.3); }
+.ai { background:rgba(255,255,255,0.3); color:#000; }
 
-.ai {
-  margin-right: auto;
-  background: var(--ai);
-}
-
-textarea {
-  resize: none;
-}
-
-button.primary {
-  background: var(--primary);
-  color: white;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.mood {
-  font-size: 2rem;
-  cursor: pointer;
-  margin: 0.3rem;
+.toggle {
+  position:fixed;
+  top:15px;
+  right:15px;
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {opacity:0; transform:translateY(10px);}
+  to {opacity:1; transform:translateY(0);}
 }
 </style>
 </head>
 
 <body>
+<button class="toggle" onclick="toggleDark()">🌙</button>
 
-<header>🌿 Bienestar Emocional</header>
+<header>Equilibrio – Bienestar Emocional</header>
 
-<nav>
-  <button onclick="showSection('chatSection')">💬 Chat IA</button>
-  <button onclick="showSection('techniquesSection')">🧘 Técnicas</button>
-  <button onclick="showSection('moodSection')">😊 Ánimo</button>
-  <button onclick="showSection('privacySection')">🔒 Privacidad</button>
-</nav>
+<div class="container">
 
-<!-- CHAT -->
-<section id="chatSection" class="active">
-  <div class="card" id="chat"></div>
-  <textarea id="userInput" rows="2" placeholder="Escribe cómo te sientes..."></textarea>
-  <button class="primary" onclick="sendMessage()">Enviar</button>
-</section>
+<!-- CHAT IA -->
+<div class="card">
+<h2>🤖 Asistente Emocional</h2>
+<div class="chat-box" id="chat"></div>
+<textarea id="userInput" placeholder="Describe lo que sientes o piensas..."></textarea>
+<button onclick="sendMessage()">Enviar</button>
+</div>
 
-<!-- TÉCNICAS -->
-<section id="techniquesSection">
-  <div class="card">
-    <h3>Respiración 4–6</h3>
-    <p>Inhala 4 segundos, exhala 6 segundos. Repite por un minuto.</p>
-    <button onclick="startBreathing()">Iniciar</button>
-    <p id="breathing"></p>
-  </div>
-</section>
+<!-- DIARIO -->
+<div class="card">
+<h2>📔 Diario Emocional</h2>
+<input type="number" id="mood" min="0" max="10" placeholder="Estado de ánimo (0-10)">
+<button onclick="saveMood()">Guardar</button>
+<canvas id="moodChart"></canvas>
+</div>
 
-<!-- ÁNIMO -->
-<section id="moodSection">
-  <div class="card">
-    <h3>¿Cómo te sientes ahora?</h3>
-    <div>
-      <span class="mood" onclick="saveMood(1)">😞</span>
-      <span class="mood" onclick="saveMood(2)">😐</span>
-      <span class="mood" onclick="saveMood(3)">🙂</span>
-      <span class="mood" onclick="saveMood(4)">😊</span>
-    </div>
-    <p id="moodLog"></p>
-  </div>
-</section>
+<!-- TESTS -->
+<div class="card">
+<h2>🧪 Test PHQ-9 / GAD-7</h2>
+<select id="testType">
+  <option value="phq9">PHQ-9 (Depresión)</option>
+  <option value="gad7">GAD-7 (Ansiedad)</option>
+</select>
+<textarea id="testAnswers" placeholder="Introduce las puntuaciones (ej: 1,2,0,3...)"></textarea>
+<button onclick="calcTest()">Calcular</button>
+<p id="testResult"></p>
+</div>
 
-<!-- PRIVACIDAD -->
-<section id="privacySection">
-  <div class="card">
-    <p>Esta app no sustituye atención profesional.</p>
-    <p>Si estás en crisis, busca ayuda inmediata.</p>
-  </div>
-</section>
+<!-- MINDFULNESS -->
+<div class="card">
+<h2>🧘 Mindfulness</h2>
+<p>Respiración 4-7-8: Inhala 4s · Retén 7s · Exhala 8s</p>
+<button onclick="startBreathing()">Iniciar</button>
+<p id="breath"></p>
+</div>
+
+<!-- CRISIS -->
+<div class="card">
+<h2>🚨 Ayuda Inmediata</h2>
+<p>Si estás en riesgo:</p>
+<strong>Teléfono de la Esperanza (España): 717 003 717</strong>
+<p>Emergencias: 112</p>
+</div>
+
+</div>
 
 <script>
-function showSection(id) {
-  document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
-  document.getElementById(id).classList.add("active");
+/* ---------- MODO OSCURO ---------- */
+function toggleDark(){
+ document.body.classList.toggle('dark');
+ localStorage.setItem('dark',document.body.classList.contains('dark'));
+}
+if(localStorage.getItem('dark')==='true') toggleDark();
+
+/* ---------- CHAT IA GEMINI ---------- */
+const API_KEY="AIzaSyCy0MFctL-sHiVsRuQ_ZMDt7kmQ0Z632GA";
+let memory = JSON.parse(localStorage.getItem('memory')||"[]");
+
+function addMsg(text,cls){
+ const div=document.createElement('div');
+ div.className='msg '+cls;
+ div.textContent=text;
+ chat.appendChild(div);
+ chat.scrollTop=chat.scrollHeight;
 }
 
-/* ===== PROMPT SEGURO ===== */
-const SYSTEM_PROMPT = `
-Eres una asistente de bienestar emocional.
-Responde en máximo 2–3 frases.
-Valida la emoción primero.
-No diagnostiques.
-Haz como máximo una pregunta.
+async function sendMessage(){
+ const input=document.getElementById('userInput');
+ if(!input.value) return;
+ addMsg(input.value,'user');
+ memory.push({role:"user",content:input.value});
+ input.value="";
+
+ const prompt = `
+Eres un asistente de bienestar emocional basado en evidencia científica.
+Objetivos:
+- Identificar emociones específicas
+- Detectar distorsiones cognitivas (catastrofismo, todo/nada, personalización, lectura de mente)
+- Aplicar Terapia Cognitivo-Conductual
+- Validar emociones con empatía genuina
+- Formular preguntas socráticas
+- Sugerir activación conductual y mindfulness
+- Nunca repitas frases ni des diagnósticos
+
+Contexto previo:
+${memory.map(m=>m.content).join("\n")}
 `;
 
-/* ===== CRISIS ===== */
-function isCrisis(text) {
-  return ["suicid", "matarme", "no quiero vivir", "hacerme daño"]
-    .some(w => text.toLowerCase().includes(w));
+ const res = await fetch(
+ "https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key="+API_KEY,
+ {
+ method:"POST",
+ headers:{"Content-Type":"application/json"},
+ body:JSON.stringify({
+   contents:[{parts:[{text:prompt}]}]
+ })
+ });
+ const data = await res.json();
+ const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "No pude responder.";
+ addMsg(reply,'ai');
+ memory.push({role:"ai",content:reply});
+ localStorage.setItem('memory',JSON.stringify(memory.slice(-10)));
 }
 
-/* ===== CHAT ===== */
-async function sendMessage() {
-  const input = document.getElementById("userInput");
-  const text = input.value.trim();
-  if (!text) return;
+/* ---------- DIARIO Y GRÁFICO ---------- */
+let moods = JSON.parse(localStorage.getItem('moods')||"[]");
 
-  addMessage("user", text);
-  input.value = "";
-
-  if (isCrisis(text)) {
-    addMessage("ai",
-      "Siento que estés pasando por algo tan intenso. " +
-      "Es importante que busques ayuda profesional o servicios de emergencia ahora mismo."
-    );
-    return;
-  }
-
-  const reply = await callGemini(text);
-  addMessage("ai", reply);
+function saveMood(){
+ const val=document.getElementById('mood').value;
+ if(val==="") return;
+ moods.push({date:new Date().toLocaleDateString(),value:+val});
+ localStorage.setItem('moods',JSON.stringify(moods));
+ drawChart();
 }
 
-function addMessage(role, text) {
-  const chat = document.getElementById("chat");
-  const div = document.createElement("div");
-  div.className = "msg " + role;
-  div.textContent = text;
-  chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
+function drawChart(){
+ const ctx=document.getElementById('moodChart');
+ new Chart(ctx,{
+ type:'line',
+ data:{
+   labels:moods.map(m=>m.date),
+   datasets:[{label:'Ánimo',data:moods.map(m=>m.value)}]
+ }
+ });
+}
+drawChart();
+
+/* ---------- TESTS ---------- */
+function calcTest(){
+ const arr=document.getElementById('testAnswers').value.split(',').map(n=>+n);
+ const sum=arr.reduce((a,b)=>a+b,0);
+ let interp="";
+ if(document.getElementById('testType').value==="phq9"){
+   interp = sum<5?"Mínimo":sum<10?"Leve":sum<15?"Moderado":"Severo";
+ } else {
+   interp = sum<5?"Mínimo":sum<10?"Leve":sum<15?"Moderado":"Severo";
+ }
+ document.getElementById('testResult').textContent =
+ "Puntuación: "+sum+" · Severidad: "+interp;
 }
 
-/* ===== ENTER PARA ENVIAR ===== */
-document.getElementById("userInput").addEventListener("keydown", e => {
-  if (e.key === "Enter" && !e.shiftKey) {
-    e.preventDefault();
-    sendMessage();
-  }
-});
-
-/* ===== GEMINI ===== */
-async function callGemini(userText) {
-      const API_KEY = "AIzaSyCy0MFctL-sHiVsRuQ_ZMDt7kmQ0Z632GA";
-  try {
-    const res = await fetch(
-      `https://AIzaSyCy0MFcLL-sHiVsRWQ_ZMJt7KmQ0Z632GA.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          contents: [
-            { role: "user", parts: [{ text: SYSTEM_PROMPT }] },
-            { role: "user", parts: [{ text: userText }] }
-          ]
-        })
-      }
-    );
-
-    const data = await res.json();
-    return data.candidates[0].content.parts[0].text;
-
-  } catch {
-    const fallbacks = [
-      "Gracias por compartir esto. ¿Qué es lo que más te pesa ahora?",
-      "Suena a que ha sido un momento difícil. Estoy aquí para escucharte.",
-      "Tiene sentido que te sientas así. ¿Quieres contarme un poco más?"
-    ];
-    return fallbacks[Math.floor(Math.random() * fallbacks.length)];
-  }
-}
-
-/* ===== RESPIRACIÓN ===== */
-function startBreathing() {
-  const el = document.getElementById("breathing");
-  let steps = ["Inhala…", "Exhala…"];
-  let i = 0;
-  const interval = setInterval(() => {
-    el.textContent = steps[i % 2];
-    i++;
-    if (i > 6) clearInterval(interval);
-  }, 5000);
-}
-
-/* ===== ÁNIMO ===== */
-function saveMood(v) {
-  const d = new Date().toLocaleString();
-  localStorage.setItem("mood", `${v} – ${d}`);
-  document.getElementById("moodLog").textContent =
-    "Último registro: " + localStorage.getItem("mood");
+/* ---------- RESPIRACIÓN ---------- */
+function startBreathing(){
+ const txt=document.getElementById('breath');
+ txt.textContent="Inhala...";
+ setTimeout(()=>txt.textContent="Retén...",4000);
+ setTimeout(()=>txt.textContent="Exhala...",11000);
+ setTimeout(()=>txt.textContent="Repite el ciclo conscientemente.",19000);
 }
 </script>
-
 </body>
 </html>
