@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Bienestar Emocional</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    :root {
+      --bg: #fff7f2;
+      --primary: #d96c4f;
+      --secondary: #f3c7b1;
+      --text: #3b2f2f;
+      --card: #ffffff;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    header {
+      padding: 1rem;
+      background: var(--primary);
+      color: white;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-around;
+      background: var(--secondary);
+      padding: 0.5rem;
+    }
+
+    nav button {
+      background: none;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      color: var(--text);
+    }
+
+    section {
+      display: none;
+      padding: 1rem;
+    }
+
+    section.active {
+      display: block;
+    }
+
+    .card {
+      background: var(--card);
+      padding: 1rem;
+      border-radius: 12px;
+      margin-bottom: 1rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    #chat {
+      max-height: 60vh;
+      overflow-y: auto;
+    }
+
+    .msg {
+      margin-bottom: 0.5rem;
+    }
+
+    .user {
+      text-align: right;
+      font-weight: bold;
+    }
+
+    .ai {
+      text-align: left;
+      color: #5a3e36;
+    }
+
+    input, textarea, select, button {
+      width: 100%;
+      padding: 0.6rem;
+      margin-top: 0.5rem;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+    }
+
+    button.primary {
+      background: var(--primary);
+      color: white;
+      border: none;
+      font-weight: bold;
+    }
+
+    .mood {
+      font-size: 2rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>Bienestar Emocional</header>
+
+<nav>
+  <button onclick="showSection('chatSection')">Chat IA</button>
+  <button onclick="showSection('techniquesSection')">Técnicas</button>
+  <button onclick="showSection('moodSection')">Ánimo</button>
+  <button onclick="showSection('privacySection')">Privacidad</button>
+</nav>
+
+<!-- CHAT IA -->
+<section id="chatSection" class="active">
+  <div class="card" id="chat"></div>
+
+  <textarea id="userInput" placeholder="Escribe cómo te sientes..."></textarea>
+  <button class="primary" onclick="sendMessage()">Enviar</button>
+</section>
+
+<!-- TÉCNICAS -->
+<section id="techniquesSection">
+  <div class="card">
+    <h3>Respiración 4-6</h3>
+    <p>Inhala 4 segundos, exhala 6 segundos. Repite por 1 minuto.</p>
+    <button onclick="startBreathing()">Iniciar</button>
+    <p id="breathing"></p>
+  </div>
+
+  <div class="card">
+    <h3>Atención plena breve</h3>
+    <p>Cierra los ojos y nombra 3 cosas que puedas sentir con tu cuerpo.</p>
+  </div>
+</section>
+
+<!-- REGISTRO DE ÁNIMO -->
+<section id="moodSection">
+  <div class="card">
+    <h3>¿Cómo te sientes ahora?</h3>
+    <div>
+      <span class="mood" onclick="saveMood(1)">😞</span>
+      <span class="mood" onclick="saveMood(2)">😐</span>
+      <span class="mood" onclick="saveMood(3)">🙂</span>
+      <span class="mood" onclick="saveMood(4)">😊</span>
+    </div>
+    <p id="moodLog"></p>
+  </div>
+</section>
+
+<!-- PRIVACIDAD -->
+<section id="privacySection">
+  <div class="card">
+    <h3>Privacidad y seguridad</h3>
+    <p>
+      Esta app no sustituye atención profesional.  
+      Tus datos permanecen en tu navegador.
+    </p>
+    <p>
+      Si te encuentras en crisis, busca ayuda profesional inmediata.
+    </p>
+  </div>
+</section>
+
+<script>
+/* ------------------------------
+   NAVEGACIÓN
+--------------------------------*/
+function showSection(id) {
+  document.querySelectorAll("section").forEach(s => s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+/* ------------------------------
+   PROMPT CLÍNICAMENTE SEGURO
+--------------------------------*/
+const SYSTEM_PROMPT = `
+Eres una asistente de bienestar emocional.
+No eres terapeuta ni haces diagnósticos.
+Responde con empatía, frases breves (máx. 2–3).
+Valida emociones antes de sugerir algo.
+Haz como máximo una pregunta.
+Si detectas crisis, indica buscar ayuda profesional.
+`;
+
+/* ------------------------------
+   DETECCIÓN DE CRISIS (BÁSICA)
+--------------------------------*/
+function isCrisis(text) {
+  const crisisWords = ["suicid", "matarme", "no quiero vivir", "hacerme daño"];
+  return crisisWords.some(w => text.toLowerCase().includes(w));
+}
+
+/* ------------------------------
+   CHAT IA (Gemini – DEMO)
+   ⚠️ NO USAR EN PRODUCCIÓN ASÍ
+--------------------------------*/
+async function sendMessage() {
+  const input = document.getElementById("userInput");
+  const text = input.value.trim();
+  if (!text) return;
+
+  addMessage("user", text);
+  input.value = "";
+
+  if (isCrisis(text)) {
+    addMessage("ai",
+      "Siento que estés pasando por algo tan intenso. " +
+      "No puedo ayudarte en una crisis, pero es importante que busques ayuda inmediata de un profesional o servicio de emergencia."
+    );
+    return;
+  }
+
+  const response = await callGemini(text);
+  addMessage("ai", response);
+}
+
+function addMessage(role, text) {
+  const chat = document.getElementById("chat");
+  const div = document.createElement("div");
+  div.className = "msg " + role;
+  div.textContent = text;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+}
+
+/* ------------------------------
+   LLAMADA A GEMINI
+--------------------------------*/
+async function callGemini(userText) {
+  // ⚠️ Reemplaza con tu API KEY SOLO PARA DEMO
+  const API_KEY = "PEGA_AQUI_TU_API_KEY";
+
+  const res = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [
+          { role: "user", parts: [{ text: SYSTEM_PROMPT + "\nUsuario: " + userText }] }
+        ]
+      })
+    }
+  );
+
+  const data = await res.json();
+  return data.candidates?.[0]?.content?.parts?.[0]?.text
+    || "Gracias por compartir. Estoy aquí para acompañarte.";
+}
+
+/* ------------------------------
+   RESPIRACIÓN GUIADA
+--------------------------------*/
+function startBreathing() {
+  const el = document.getElementById("breathing");
+  let phase = 0;
+  const phases = ["Inhala…", "Exhala…"];
+  const interval = setInterval(() => {
+    el.textContent = phases[phase % 2];
+    phase++;
+    if (phase > 6) clearInterval(interval);
+  }, 5000);
+}
+
+/* ------------------------------
+   REGISTRO DE ÁNIMO (LOCAL)
+--------------------------------*/
+function saveMood(value) {
+  const date = new Date().toLocaleString();
+  localStorage.setItem("mood", `${value} - ${date}`);
+  document.getElementById("moodLog").textContent =
+    "Último registro: " + localStorage.getItem("mood");
+}
+</script>
+
+</body>
+</html>
