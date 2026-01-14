@@ -220,6 +220,14 @@ async function sendMessage(){
   }
 }
 
+// Listener para enviar mensaje con Enter
+document.getElementById('chatInput').addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+});
+
 /* ================= MEDITACIÓN ================= */
 function startMeditation(){
   const msg = new SpeechSynthesisUtterance(
