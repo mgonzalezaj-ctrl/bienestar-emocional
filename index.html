@@ -197,12 +197,11 @@ async function sendMessage(){
       throw new Error(data.error?.message || 'Error en la conexión con la API');
     }
     
-      const botResponse = data.content[0].text;    responseElement.innerText = botResponse;
+      const botResponse = data.respuesta;    responseElement.innerText = botResponse;
     
   } catch (error) {
     console.error('Error:', error);
-        const botResponse = data.response;
-  } finally {
+        responseElement.innerText = 'Lo siento, hubo un problema al procesar tu mensaje. Inténtalo de nuevo.';  } finally {
     inputElement.value = '';
   }
 }
