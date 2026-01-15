@@ -11,40 +11,43 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Mensaje requerido' });
     }
 
-    // Llamar a Claude API
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'x-api-key': process.env.ANTHROPIC_API_KEY,
-        'anthropic-version': '2023-06-01',
-        'content-type': 'application/json'
-      },
-      body: JSON.stringify({
-        model: 'claude-3-5-sonnet-20241022',
-        max_tokens: 1024,
-        system: 'Eres un asistente de apoyo emocional. Responde de forma empática y breve (máximo 2-3 frases) usando principios de TCC. Valida emociones y ofrece estrategias prácticas.',
-        messages: [
-          {
-            role: 'user',
-            content: message
+    // Llamar a Gemini API (mucho más rápido que Claude)
+    const response = await fetch(
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          contents: [{
+            parts: [{
+              text: `Eres un asistente de apoyo emocional experto. Responde de forma empática, breve (máximo 2-3 frases cortas) y práctica. Usa principios de TCC (Terapia Cognitivo-Conductual). Valida emociones y ofrece una estrategia concreta.\n\nUsuario: ${message}`
+            }]
+          }],
+          generationConfig: {
+            temperature: 0.7,
+            maxOutputTokens: 150,
+            topP: 0.8,
+            topK: 40
           }
-        ]
-      })
-    });
+        })
+      }
+    );
 
     const data = await response.json();
 
     if (!response.ok) {
-      throw new Error(data.error?.message || 'Error en la API');
+      throw new Error(data.error?.message || 'Error en la API de Gemini');
     }
 
-    const botResponse = data.content[0].text;
+    const botResponse = data.candidates[0].content.parts[0].text;
     return res.status(200).json({ response: botResponse });
 
   } catch (error) {
     console.error('Error:', error);
     return res.status(500).json({ 
-      error: 'Error al procesar tu mensaje. Inténtalo de nuevo.' 
+      error: 'Lo siento, hubo un problema al procesar tu mensaje. Inténtalo de nuevo.' 
     });
   }
 }
