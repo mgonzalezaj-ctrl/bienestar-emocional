@@ -42,7 +42,7 @@ export default async function handler(req, res) {
     }
 
     const botResponse = data.candidates[0].content.parts[0].text;
-    return res.status(200).json({ response: botResponse });
+    return res.status(200).json({ respuesta: botResponse });
 
   } catch (error) {
     console.error('Error:', error);
