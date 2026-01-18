@@ -13,7 +13,7 @@ export default async function handler(req, res) {
 
     // Llamar a Gemini API (mucho más rápido que Claude)
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
       {
         method: 'POST',
         headers: {
@@ -22,7 +22,9 @@ export default async function handler(req, res) {
         body: JSON.stringify({
           contents: [{
             parts: [{
-              text: `Eres un asistente de apoyo emocional experto. Responde de forma empática, breve (máximo 2-3 frases cortas) y práctica. Usa principios de TCC (Terapia Cognitivo-Conductual). Valida emociones y ofrece una estrategia concreta.\n\nUsuario: ${message}`
+              text: `Eres un asistente de apoyo emocional experto. Responde de forma empática, breve (máximo 2-3 frases cortas) y práctica. Usa principios de TCC (Terapia Cognitivo-Conductual). Valida emociones y ofrece una estrategia concreta.
+
+Usuario: ${message}`
             }]
           }],
           generationConfig: {
@@ -42,8 +44,8 @@ export default async function handler(req, res) {
     }
 
     const botResponse = data.candidates[0].content.parts[0].text;
-    return res.status(200).json({ respuesta: botResponse });
 
+    return res.status(200).json({ respuesta: botResponse });
   } catch (error) {
     console.error('Error:', error);
     return res.status(500).json({ 
